@@ -63,32 +63,43 @@ def seperate(nucleotide_dict):
     surface_protein['gene=nef'] = nucleotide_dict['gene=nef']
     return surface_protein, other
 
-aa3 = {"Ala ": ["GCU" , "GCC" , "GCA" , "GCG"] ,
-       "Arg": ["CGU" , "CGC" , "CGA" , "CGG" , "AGA" , "AGG"] ,
-       "Asn": ["AAU" , "AAC"] ,
-       "Asp": ["GAU" , "GAC"] ,
-       "Cys": ["UGU" , "UGC"] ,
-       "Gln": ["CAA" , "CAG"] ,
-       "Glu": ["GAA" , "GAG"] ,
-       "Gly": ["GGU" , "GGC" , "GGA" , "GGG"] ,
-       "His": ["CAU" , "CAC"] ,
-       "Ile": ["AUU" , "AUC" , "AUA"] ,
-       "Leu": ["UUA" , "UUG" , "CUU" , "CUC" , "CUA" , "CUG"] ,
-       "Lys": ["AAA" , "AAG"] ,
-       "Met": ["AUG"] ,
-       "Phe": ["UUU" , "UUC"] ,
-       "Pro": ["CCU" , "CCC" , "CCA" , "CCG"] ,
-       "Ser": ["UCU" , "UCC" , "UCA" , "UCG" , "AGU" ,"AGC"] ,
-       "Thr": ["ACU" , "ACC" , "ACA" , "ACG"] ,
-       "Trp": ["UGG"] ,
-       "Tyr": ["UAU" , "UAC"] ,
-       "Val": ["GUU" , "GUC" , "GUA" , "GUG"] ,
-       "Start": ["AUG" , "CUG" , "UUG" , "GUG" , "AUU"] ,
-       "Stop" : ["UAG" , "UGA" , "UAA"]
-}
+
+aa3 = {"Ala ": ["GCT", "GCC", "GCA", "GCG"],
+       "Arg": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
+       "Asn": ["AAT", "AAC"], "Asp": ["GAT", "GAC"],
+       "Cys": ["TGT", "TGC"], "Gln": ["CAA", "CAG"],
+       "GlT": ["GAA", "GAG"], "Gly": ["GGT", "GGC", "GGA", "GGG"],
+       "His": ["CAT", "CAC"], "Ile": ["ATT", "ATC", "ATA"],
+       "LeT": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
+       "Lys": ["AAA", "AAG"], "Met": ["ATG"], "Phe": ["TTT", "TTC"],
+       "Pro": ["CCT", "CCC", "CCA", "CCG"],
+       "Ser": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
+       "Thr": ["ACT", "ACC", "ACA", "ACG"], "Trp": ["TGG"],
+       "Tyr": ["TAT", "TAC"], "Val": ["GTT", "GTC", "GTA", "GTG"],
+       "Start": ["ATG", "CTG", "TTG", "GTG", "ATT"],
+       "Stop": ["TAG", "TGA", "TAA"]}
+
+
+def codon_counter(seq):
+    codon_count = {}
+    for i in range(0, len(seq), 3):
+        codon = seq[i:i+3]
+        print(codon)
+        try:
+            codon_count[codon] += 1
+        except KeyError:
+            codon_count[codon] = 1
+    return codon_count
+
+
+def sort_by_AA(codon_count):
+    pass
 
 
 if __name__ == '__main__':
-    x = get_sequences('fasta/virus/siv seq mRNA.fasta')
-    print(seperate(x)[0])
+
+    seqs = get_sequences('fasta/virus/siv seq mRNA.fasta')
+    surface_protein, other = seperate(seqs)
+    print(codon_counter(surface_protein['gene=nef']))
+
 

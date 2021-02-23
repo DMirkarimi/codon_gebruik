@@ -64,6 +64,10 @@ def seperate(nucleotide_dict):
     return surface_protein, other
 
 
+order = ['Ala ', 'Arg', 'Asn', 'Asp', 'Cys', 'Gln', 'GlT', 'Gly', 'His',
+         'Ile', 'LeT', 'Lys', 'Met', 'Phe', 'Pro', 'Ser', 'Thr', 'Trp',
+         'Tyr', 'Val', 'Start', 'Stop']
+
 aa3 = {"Ala ": ["GCT", "GCC", "GCA", "GCG"],
        "Arg": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
        "Asn": ["AAT", "AAC"], "Asp": ["GAT", "GAC"],
@@ -84,7 +88,6 @@ def codon_counter(seq):
     codon_count = {}
     for i in range(0, len(seq), 3):
         codon = seq[i:i+3]
-        print(codon)
         try:
             codon_count[codon] += 1
         except KeyError:
@@ -93,13 +96,22 @@ def codon_counter(seq):
 
 
 def sort_by_AA(codon_count):
-    pass
+    AA_count = {}
+    for i in order:
+        AA_count[i] = []
+        for codon in aa3[i]:
+            try:
+                AA_count[i].append(codon_count[codon])
+            except KeyError:
+                AA_count[i].append(0)
+    print(AA_count)
+
 
 
 if __name__ == '__main__':
 
     seqs = get_sequences('fasta/virus/siv seq mRNA.fasta')
     surface_protein, other = seperate(seqs)
-    print(codon_counter(surface_protein['gene=nef']))
+    sort_by_AA(codon_counter(surface_protein['gene=nef']))
 
 

@@ -2,6 +2,7 @@ import re
 import matplotlib.pyplot as plt
 from typing import Tuple
 import numpy as np
+import pandas as pd
 
 
 def get_sequences(file_path: str) -> dict:
@@ -13,6 +14,8 @@ def get_sequences(file_path: str) -> dict:
         for raw_line in f:
             # Removing trailing newlines.
             line = raw_line.rstrip()
+            if line == '':
+                continue
             # Checking if the current line is a header.
             if line[0] == '>':
                 # Turning sequence list into one string.
@@ -49,11 +52,11 @@ def get_sequences(file_path: str) -> dict:
         return genes
 
 
-def separate(genes: dict) -> Tuple[dict, dict]:
-    surface_protein = {}
-    other = genes.copy()
-    other.pop('gene=nef')
-    surface_protein['gene=nef'] = genes['gene=nef']
+def separate(genes: dict) -> Tuple[list, list]:
+    surface_protein = [genes['gene=nef']]
+    genes.pop('gene=nef')
+    other = list(genes.values())
+
     return surface_protein, other
 
 
@@ -101,21 +104,30 @@ def sort_by_aa(codon_count: dict) -> dict:
 
 def plot(aa_count: dict) -> None:
     x = np.arange(64, step=3.2)
-    for counter, amino_acid in zip(x, order):
-        codon_counts = aa_count[amino_acid]
-        name_list = aa3[amino_acid]
-        pos = np.linspace(counter, counter+len(codon_counts)*0.4,
-                          len(codon_counts))
-        plt.bar(pos, codon_counts, 0.4)
+    current_pos = 0
+    pos_list = []
+    for count in range(0, 21):
+        pos_list.append(current_pos)
+        codon_counts = aa_count[order[count]]
 
-    plt.xticks(x, order)
-    plt.gcf().set_size_inches([12.8, 4.8])
+        pos = [current_pos+(0.5*i) for i in range(len(codon_counts))]
+        plt.bar(pos, codon_counts, 0.4)
+        current_pos += (len(codon_counts)+1) * 0.6
+
+    plt.xticks(pos_list, order)
+    plt.gcf().set_size_inches([12.8, 5])
     plt.show()
 
 
-if __name__ == '__main__':
-    genes = get_sequences('fasta/virus/siv seq mRNA.fasta')
-    surface_protein, other = separate(genes)
-    plot(sort_by_aa(codon_counter(surface_protein['gene=nef'])))
+def process_sequences(seqs: list) -> None:
+    df = pd.DataFrame([codon_counter(seq) for seq in seqs])
+    mean = dict(df.mean())
+    plot(sort_by_aa(mean))
 
+
+if __name__ == '__main__':
+    genes = get_sequences('fasta/virus/hiv-1 seq mRNA.fasta')
+    surface_protein, other = separate(genes)
+    process_sequences(surface_protein)
+    process_sequences(other)
 

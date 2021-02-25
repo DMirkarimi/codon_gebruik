@@ -1,8 +1,9 @@
-import re
-import matplotlib.pyplot as plt
-from typing import Tuple
-import pandas as pd
 import ntpath
+import re
+from typing import Tuple
+
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def get_sequences(file_path: str) -> dict:
@@ -65,9 +66,8 @@ order = ['A ', 'R', 'N', 'D', 'C', 'E', 'G', 'H', 'I', 'L', 'K', 'M',
 
 aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
-       "N": ["AAT", "AAC"], "D": ["GAT", "GAC"],
-       "C": ["TGT", "TGC"], "E": ["GAA", "GAG"],
-       "G": ["GGT", "GGC", "GGA", "GGG"],
+       "N": ["AAT", "AAC"], "D": ["GAT", "GAC"], "C": ["TGT", "TGC"],
+       "E": ["GAA", "GAG"], "G": ["GGT", "GGC", "GGA", "GGG"],
        "H": ["CAT", "CAC"], "I": ["ATT", "ATC", "ATA"],
        "L": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
        "K": ["AAA", "AAG"], "M": ["ATG"], "F": ["TTT", "TTC"],
@@ -77,11 +77,11 @@ aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "Y": ["TAT", "TAC"], "V": ["GTT", "GTC", "GTA", "GTG"],
        "Q": ["CAA", "CAG", ]}
 
-colors = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple", "tab:brown",
-          "tab:pink", "tab:gray", "tab:olive", "tab:cyan",
-          "firebrick", "yellow", "darkblue", "indigo", "forestgreen",
-          "dodgerblue", "teal", "lightseagreen", "royalblue", "gold",
-          "hotpink"]
+colors = ["tab:blue", "tab:orange", "tab:green", "tab:red",
+          "tab:purple", "tab:brown", "tab:pink", "tab:gray",
+          "tab:olive", "tab:cyan", "firebrick", "yellow", "darkblue",
+          "indigo", "forestgreen", "dodgerblue", "teal",
+          "lightseagreen", "royalblue", "gold", "hotpink"]
 
 
 def codon_counter(seq: str) -> dict:

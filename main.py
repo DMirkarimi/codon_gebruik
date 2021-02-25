@@ -22,7 +22,7 @@ def get_sequences(file_path: str) -> dict:
                 # Turning sequence list into one string.
                 current_seq = ''.join(current_seq_list)
                 try:
-                    search = re.search(r'gene=[A-Za-z0-9]*',
+                    search = re.search(r'protein=[A-Za-z0-9]*',
                                        current_header)
                     gene_name = search.group().lower()
                 except AttributeError:
@@ -54,8 +54,13 @@ def get_sequences(file_path: str) -> dict:
 
 
 def separate(genes: dict) -> Tuple[list, list]:
-    surface_protein = [genes['gene=env']]
-    genes.pop('gene=env')
+    try:
+        surface_protein = [genes['gene=env']]
+        genes.pop('gene=env')
+
+    except KeyError:
+        surface_protein = [genes['protein=env']]
+        genes.pop('protein=env')
     other = list(genes.values())
 
     return surface_protein, other
@@ -148,7 +153,7 @@ def process_sequences(seqs: list) -> None:
 
 
 if __name__ == '__main__':
-    file = 'fasta/virus/hiv-1 seq mRNA.fasta'
+    file = 'fasta/virus/hiv-2 seq mRNA.fasta'
     genes = get_sequences(file)
     surface_protein, other = separate(genes)
     process_sequences(surface_protein)

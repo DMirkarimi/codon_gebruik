@@ -1,6 +1,7 @@
 import ntpath
 import re
 from typing import Tuple
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -112,15 +113,18 @@ def plot(aa_count: dict) -> None:
         codon_names = aa3[order[count]]
         plt.bar(codon_names, codon_counts, color=colors[count],
                 label=order[count])
-
+        for i in range(len(codon_counts)):
+            plt.annotate(str(int(round(codon_counts[i])))+'%',
+                         xy=(codon_names[i], codon_counts[i]),
+                         ha='center', va='bottom', rotation= 90)
     plt.xticks(rotation=90)
     plt.legend(loc=(0.15, -0.4), ncol=10)
     plt.gcf().set_size_inches([12, 5])
     name = ntpath.basename(file)
-    plt.title(f'Codon Gebruik in {name}')
+    plt.title(f'Codon Gebruik in {name}', loc='left')
     plt.xlabel('Codons Per Aminozuur')
     plt.ylabel('Codon Gebruik in Procent')
-    plt.tight_layout()
+    plt.tight_layout(rect=[0, -0.08, 1, 1])
     plt.show()
 
 

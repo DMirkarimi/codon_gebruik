@@ -115,8 +115,8 @@ def plot(aa_count: dict) -> None:
                 label=order[count])
         for i in range(len(codon_counts)):
             plt.annotate(str(int(round(codon_counts[i])))+'%',
-                         xy=(codon_names[i], codon_counts[i]),
-                         ha='center', va='bottom', rotation= 90)
+                         xy=(codon_names[i], codon_counts[i]+2),
+                         ha='center', va='bottom', rotation=90)
     plt.xticks(rotation=90)
     plt.legend(loc=(0.15, -0.4), ncol=10)
     plt.gcf().set_size_inches([12, 5])

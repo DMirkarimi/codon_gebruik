@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from typing import Tuple
 import numpy as np
 import pandas as pd
+import ntpath
 
 
 def get_sequences(file_path: str) -> dict:
@@ -61,7 +62,7 @@ def separate(genes: dict) -> Tuple[list, list]:
 
 
 order = ['A ', 'R', 'N', 'D', 'C', 'E', 'G', 'H', 'I', 'L', 'K', 'M',
-         'F', 'P', 'S', 'T', 'Trp', 'Y', 'V', 'Start', 'Stop']
+         'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'Start', 'Stop']
 
 aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
@@ -73,7 +74,7 @@ aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "K": ["AAA", "AAG"], "M": ["ATG"], "F": ["TTT", "TTC"],
        "P": ["CCT", "CCC", "CCA", "CCG"],
        "S": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
-       "T": ["ACT", "ACC", "ACA", "ACG"], "Trp": ["TGG"],
+       "T": ["ACT", "ACC", "ACA", "ACG"], "W": ["TGG"],
        "Y": ["TAT", "TAC"], "V": ["GTT", "GTC", "GTA", "GTG"],
        "Start": ["ATG", "CTG", "TTG", "GTG", "ATT"],
        "Stop": ["TAG", "TGA", "TAA"]}
@@ -103,7 +104,6 @@ def sort_by_aa(codon_count: dict) -> dict:
 
 
 def plot(aa_count: dict) -> None:
-    x = np.arange(64, step=3.2)
     current_pos = 0
     pos_list = []
     for count in range(0, 21):
@@ -115,18 +115,40 @@ def plot(aa_count: dict) -> None:
         current_pos += (len(codon_counts)+1) * 0.6
 
     plt.xticks(pos_list, order)
-    plt.gcf().set_size_inches([12.8, 5])
+    plt.gcf().set_size_inches([12, 5])
+    name = ntpath.basename(file)
+    plt.title(f'Codon Bias in {name}')
+    plt.xlabel('Codons Per Aminozuur')
+    plt.ylabel('Codon Bias in Procent')
+    plt.tight_layout()
     plt.show()
 
 
 def process_sequences(seqs: list) -> None:
     df = pd.DataFrame([codon_counter(seq) for seq in seqs])
     mean = dict(df.mean())
+    for letter in order:
+        aa = aa3[letter]
+        total_count = 0
+        for codon in aa:
+
+            try:
+                total_count += mean[codon]
+            except:
+                pass
+        for codon in aa:
+            try:
+                x = mean[codon]/total_count *\
+                                         100
+                mean[codon] = x
+            except:
+                pass
     plot(sort_by_aa(mean))
 
 
 if __name__ == '__main__':
-    genes = get_sequences('fasta/virus/hiv-1 seq mRNA.fasta')
+    file = 'fasta/virus/hiv-1 seq mRNA.fasta'
+    genes = get_sequences(file)
     surface_protein, other = separate(genes)
     process_sequences(surface_protein)
     process_sequences(other)

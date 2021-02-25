@@ -1,7 +1,6 @@
 import re
 import matplotlib.pyplot as plt
 from typing import Tuple
-import numpy as np
 import pandas as pd
 import ntpath
 
@@ -62,12 +61,12 @@ def separate(genes: dict) -> Tuple[list, list]:
 
 
 order = ['A ', 'R', 'N', 'D', 'C', 'E', 'G', 'H', 'I', 'L', 'K', 'M',
-         'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'Start', 'Stop']
+         'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'Q']
 
 aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
        "N": ["AAT", "AAC"], "D": ["GAT", "GAC"],
-       "C": ["TGT", "TGC"], "E": ["CAA", "CAG", "GAA", "GAG"],
+       "C": ["TGT", "TGC"], "E": ["GAA", "GAG"],
        "G": ["GGT", "GGC", "GGA", "GGG"],
        "H": ["CAT", "CAC"], "I": ["ATT", "ATC", "ATA"],
        "L": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
@@ -76,11 +75,13 @@ aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "S": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
        "T": ["ACT", "ACC", "ACA", "ACG"], "W": ["TGG"],
        "Y": ["TAT", "TAC"], "V": ["GTT", "GTC", "GTA", "GTG"],
-       "Start": ["ATG", "CTG", "TTG", "GTG", "ATT"],
-       "Stop": ["TAG", "TGA", "TAA"]}
+       "Q": ["CAA", "CAG", ]}
 
-colors = ["tab: blue", "tab: orange", "tab: green", "tab: red", "tab: purple", "tab: brown", "tab: pink", "tab: gray", "tab: olive", "tab: cyan", 
-          "firebrick", "yellow", "darkblue", "indigo", "forestgreen", "dodgerblue", "teal", "lightseagreen", "royalblue", "gold"]
+colors = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple", "tab:brown",
+          "tab:pink", "tab:gray", "tab:olive", "tab:cyan",
+          "firebrick", "yellow", "darkblue", "indigo", "forestgreen",
+          "dodgerblue", "teal", "lightseagreen", "royalblue", "gold",
+          "hotpink"]
 
 
 def codon_counter(seq: str) -> dict:
@@ -107,25 +108,14 @@ def sort_by_aa(codon_count: dict) -> dict:
 
 
 def plot(aa_count: dict) -> None:
-    current_pos = 0
-    pos_list = []
-    # for count in range(0, 21):
-    #     pos_list.append(current_pos)
-    #     codon_counts = aa_count[order[count]]
-    #
-    #     pos = [current_pos+(0.5*i) for i in range(len(codon_counts))]
-    #     plt.bar(pos, codon_counts, 0.4)
-    #     current_pos += (len(codon_counts)+1) * 0.6
-    cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
-    for count in range(0, 21):
+    for count in range(0, len(order)):
         codon_counts = aa_count[order[count]]
         codon_names = aa3[order[count]]
-        plt.bar(codon_names, codon_counts,
+        plt.bar(codon_names, codon_counts, color=colors[count],
                 label=order[count])
 
     plt.xticks(rotation=90)
-    plt.legend(loc= 'lower center', ncol=10)
-    # plt.xticks(pos_list, order)
+    plt.legend(loc=(0.15,-0.4), ncol=10)
     plt.gcf().set_size_inches([12, 5])
     name = ntpath.basename(file)
     plt.title(f'Codon Bias in {name}')
@@ -142,17 +132,14 @@ def process_sequences(seqs: list) -> None:
         aa = aa3[letter]
         total_count = 0
         for codon in aa:
-
             try:
                 total_count += mean[codon]
-            except:
+            except KeyError:
                 pass
         for codon in aa:
             try:
-                x = mean[codon]/total_count *\
-                                         100
-                mean[codon] = x
-            except:
+                mean[codon] = mean[codon]/total_count * 100
+            except KeyError:
                 pass
     plot(sort_by_aa(mean))
 

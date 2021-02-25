@@ -106,15 +106,23 @@ def sort_by_aa(codon_count: dict) -> dict:
 def plot(aa_count: dict) -> None:
     current_pos = 0
     pos_list = []
+    # for count in range(0, 21):
+    #     pos_list.append(current_pos)
+    #     codon_counts = aa_count[order[count]]
+    #
+    #     pos = [current_pos+(0.5*i) for i in range(len(codon_counts))]
+    #     plt.bar(pos, codon_counts, 0.4)
+    #     current_pos += (len(codon_counts)+1) * 0.6
+    cycle = plt.rcParams['axes.prop_cycle'].by_key()['color']
     for count in range(0, 21):
-        pos_list.append(current_pos)
         codon_counts = aa_count[order[count]]
+        codon_names = aa3[order[count]]
+        plt.bar(codon_names, codon_counts,
+                label=order[count])
 
-        pos = [current_pos+(0.5*i) for i in range(len(codon_counts))]
-        plt.bar(pos, codon_counts, 0.4)
-        current_pos += (len(codon_counts)+1) * 0.6
-
-    plt.xticks(pos_list, order)
+    plt.xticks(rotation=90)
+    plt.legend(loc= 'lower center', ncol=10)
+    # plt.xticks(pos_list, order)
     plt.gcf().set_size_inches([12, 5])
     name = ntpath.basename(file)
     plt.title(f'Codon Bias in {name}')

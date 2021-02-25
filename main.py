@@ -61,7 +61,7 @@ def separate(genes: dict) -> Tuple[list, list]:
 
 
 order = ['A ', 'R', 'N', 'D', 'C', 'E', 'G', 'H', 'I', 'L', 'K', 'M',
-         'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'Q']
+         'F', 'P', 'S', 'T', 'W', 'Y', 'V', 'Q', 'Stop']
 
 aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "R": ["CGT", "CGC", "CGA", "CGG", "AGA", "AGG"],
@@ -74,7 +74,7 @@ aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "S": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
        "T": ["ACT", "ACC", "ACA", "ACG"], "W": ["TGG"],
        "Y": ["TAT", "TAC"], "V": ["GTT", "GTC", "GTA", "GTG"],
-       "Q": ["CAA", "CAG", ]}
+       "Q": ["CAA", "CAG", ], 'Stop': ['TAA', 'TAG', 'TGA']}
 
 colors = ["tab:blue", "tab:orange", "tab:green", "tab:red",
           "tab:purple", "tab:brown", "tab:pink", "tab:gray",
@@ -114,7 +114,7 @@ def plot(aa_count: dict) -> None:
                 label=order[count])
 
     plt.xticks(rotation=90)
-    plt.legend(loc=(0.15,-0.4), ncol=10)
+    plt.legend(loc=(0.15, -0.4), ncol=10)
     plt.gcf().set_size_inches([12, 5])
     name = ntpath.basename(file)
     plt.title(f'Codon Bias in {name}')

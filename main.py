@@ -79,6 +79,9 @@ aa3 = {"A ": ["GCT", "GCC", "GCA", "GCG"],
        "Start": ["ATG", "CTG", "TTG", "GTG", "ATT"],
        "Stop": ["TAG", "TGA", "TAA"]}
 
+colors = ["tab: blue", "tab: orange", "tab: green", "tab: red", "tab: purple", "tab: brown", "tab: pink", "tab: gray", "tab: olive", "tab: cyan", 
+          "firebrick", "yellow", "darkblue", "indigo", "forestgreen", "dodgerblue", "teal", "lightseagreen", "royalblue", "gold"]
+
 
 def codon_counter(seq: str) -> dict:
     codon_count = {}

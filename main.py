@@ -153,7 +153,7 @@ def process_sequences(seqs: list) -> None:
 
 
 if __name__ == '__main__':
-    file = 'fasta/virus/siv-mnd2 seq mRNA.fasta'
+    file = 'fasta/virus/hiv-1 seq mRNA.fasta'
     genes = get_sequences(file)
     surface_protein, other = separate(genes)
     process_sequences(surface_protein)

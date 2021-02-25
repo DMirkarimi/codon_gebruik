@@ -14,7 +14,7 @@ def get_sequences(file_path: str) -> dict:
         current_header = next(f)
         for raw_line in f:
             # Removing trailing newlines.
-            line = raw_line.rstrip()
+            line = raw_line.rstrip().upper()
             if line == '':
                 continue
             # Checking if the current line is a header.
@@ -59,8 +59,12 @@ def separate(genes: dict) -> Tuple[list, list]:
         genes.pop('gene=env')
 
     except KeyError:
-        surface_protein = [genes['protein=env']]
-        genes.pop('protein=env')
+        try:
+            surface_protein = [genes['protein=env']]
+            genes.pop('protein=env')
+        except KeyError:
+            surface_protein = []
+
     other = list(genes.values())
 
     return surface_protein, other
@@ -153,7 +157,7 @@ def process_sequences(seqs: list) -> None:
 
 
 if __name__ == '__main__':
-    file = 'fasta/virus/hiv-1 seq mRNA.fasta'
+    file = 'fasta/alive/Salmonella-SucB.fasta'
     genes = get_sequences(file)
     surface_protein, other = separate(genes)
     process_sequences(surface_protein)

@@ -117,9 +117,9 @@ def plot(aa_count: dict) -> None:
     plt.legend(loc=(0.15, -0.4), ncol=10)
     plt.gcf().set_size_inches([12, 5])
     name = ntpath.basename(file)
-    plt.title(f'Codon Bias in {name}')
+    plt.title(f'Codon Gebruik in {name}')
     plt.xlabel('Codons Per Aminozuur')
-    plt.ylabel('Codon Bias in Procent')
+    plt.ylabel('Codon Gebruik in Procent')
     plt.tight_layout()
     plt.show()
 

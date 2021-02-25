@@ -1,7 +1,6 @@
 import ntpath
 import re
 from typing import Tuple
-
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -54,8 +53,8 @@ def get_sequences(file_path: str) -> dict:
 
 
 def separate(genes: dict) -> Tuple[list, list]:
-    surface_protein = [genes['gene=nef']]
-    genes.pop('gene=nef')
+    surface_protein = [genes['gene=env']]
+    genes.pop('gene=env')
     other = list(genes.values())
 
     return surface_protein, other
